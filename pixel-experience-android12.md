@@ -17,3 +17,16 @@ service.adb.tcp.port=5555
 ro.setupwizard.mode=DISABLED
 persist.adb.notify=0
 ```
+### 5. system\system\etc\init\usbd.rc
+```
+service usbd /system/bin/usbd
+    class late_start
+    oneshot
+    user root
+    group root usb system
+
+
+on boot
+    setprop persist.sys.usb.config adb
+    start adbd
+```

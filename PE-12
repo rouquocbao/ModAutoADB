@@ -1,18 +1,3 @@
 ### HD mod AUTO ADB , lên nguồn , đen màn thanh toán
 ## 1. Thay file adbd đã build sẵn -> system\system\apex\com.android.adbd\bin
 ## 2. Mod lên nguồn : system\system\etc\init\hw\init.rc
-
-```
-on charger
-    setprop ro.bootmode "normal"
-    setprop sys.powerctl "reboot"
-    class_start charger
-```
-
-## 3. Mod TCP 555: system/system/build.prop
-thêm vào cuối prop
-
-```
-service.adb.tcp.port=5555
-ro.setupwizard.mode=DISABLED
-```

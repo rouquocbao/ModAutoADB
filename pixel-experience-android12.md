@@ -12,3 +12,8 @@ thêm vào cuối prop
 ```
 service.adb.tcp.port=5555
 ```
+## 4. system\system\product\etc\build.prop
+```
+ro.setupwizard.mode=DISABLED
+persist.adb.notify=0
+```

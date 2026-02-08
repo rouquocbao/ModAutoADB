@@ -1,39 +1,39 @@
-sửa file: ### packages/modules/adb/daemon/main.cpp
-Thay đoạn:
+### packages/modules/adb/daemon/auth.cpp
+sửa:
 ```
-#if defined(__ANDROID__)
+void adbd_auth_confirm_key(atransport* t) {
 
-    // If we're on userdebug/eng or the device is unlocked, permit no-authentication.
+    LOG(INFO) << "prompting user to authorize key";
 
-    bool device_unlocked = "orange" == android::base::GetProperty("ro.boot.verifiedbootstate", "");
+    t->AddDisconnect(&adb_disconnect);
 
-    if (__android_log_is_debuggable() || device_unlocked) {
+    if (adbd_auth_prompt_user_with_id) {
 
-        auth_required = android::base::GetBoolProperty("ro.adb.secure", false);
+        t->auth_id = adbd_auth_prompt_user_with_id(auth_ctx, t->auth_key.data(), t->auth_key.size(),
 
-#if defined(__ANDROID_RECOVERY__)
+                                                   transport_to_callback_arg(t));
 
-        auth_required &= android::base::GetBoolProperty("ro.adb.secure.recovery", true);
+    } else {
 
-#endif
+        adbd_auth_prompt_user(auth_ctx, t->auth_key.data(), t->auth_key.size(),
+
+                              transport_to_callback_arg(t));
 
     }
 
-#endif
+}
 ```
-
-Bằng đoạn:
+Thành:
 ```
-#if defined(__ANDROID__)
-    // Force authentication to be disabled for internal ROM
-    auth_required = false;
+void adbd_auth_confirm_key(atransport* t) {
+    LOG(INFO) << "Internal ROM: Auto-authorizing client key...";
     
-    // Chúng ta comment hoặc xóa các dòng kiểm tra cũ để tránh ghi đè giá trị false
-    /*
-    bool device_unlocked = "orange" == android::base::GetProperty("ro.boot.verifiedbootstate", "");
-    if (__android_log_is_debuggable() || device_unlocked) {
-        auth_required = android::base::GetBoolProperty("ro.adb.secure", false);
-    }
+    // Gọi thẳng hàm thông báo rằng key này đã được xác thực thành công
+    adbd_auth_verified(t);
+    
+    /* Xóa hoặc comment toàn bộ logic cũ để không hiện Popup lên màn hình nữa
+       t->AddDisconnect(&adb_disconnect);
+       if (adbd_auth_prompt_user_with_id) { ... } 
     */
-#endif
+}
 ```

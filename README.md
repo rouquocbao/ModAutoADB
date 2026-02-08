@@ -1,5 +1,5 @@
-### packages/modules/adb/daemon/main.cpp
-thay đoạn
+sửa file: ### packages/modules/adb/daemon/main.cpp
+Thay đoạn:
 ```
 #if defined(__ANDROID__)
 

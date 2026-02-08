@@ -7,4 +7,8 @@ on charger
     setprop sys.powerctl "reboot"
     class_start charger
 ```
-
+## 3. Mod TCP 555: system/system/build.prop
+thêm vào cuối prop
+```
+service.adb.tcp.port=5555
+```
